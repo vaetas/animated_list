@@ -1,16 +1,6 @@
 import 'package:flutter/material.dart';
 
 class HighlightText extends StatefulWidget {
-  final TextStyle? activeStyle;
-  final TextStyle? style;
-  final String query;
-  final String text;
-  final TextAlign textAlign;
-  final TextDirection? textDirection;
-  final bool softWrap;
-  final TextOverflow overflow;
-  final double textScaleFactor;
-  final int? maxLines;
   const HighlightText({
     Key? key,
     this.activeStyle,
@@ -25,12 +15,24 @@ class HighlightText extends StatefulWidget {
     this.maxLines,
   }) : super(key: key);
 
+  final TextStyle? activeStyle;
+  final TextStyle? style;
+  final String query;
+  final String text;
+  final TextAlign textAlign;
+  final TextDirection? textDirection;
+  final bool softWrap;
+  final TextOverflow overflow;
+  final double textScaleFactor;
+  final int? maxLines;
+
   @override
   _HighlightTextState createState() => _HighlightTextState();
 }
 
 class _HighlightTextState extends State<HighlightText> {
   TextStyle get style => widget.style ?? Theme.of(context).textTheme.bodyText2!;
+
   TextStyle get activeStyle =>
       widget.activeStyle ?? style.copyWith(fontWeight: FontWeight.bold);
 
@@ -66,9 +68,10 @@ List<Triplet<int, int, bool>> getQueryHighlights(String text, String query) {
   final t = text.toLowerCase();
   final q = query.toLowerCase();
 
-  if (t.isEmpty || q.isEmpty || !t.contains(q)) return [Triplet(0, t.length, false)];
+  if (t.isEmpty || q.isEmpty || !t.contains(q))
+    return [Triplet(0, t.length, false)];
 
-  List<Triplet<int, int, bool>> idxs = [];
+  var idxs = <Triplet<int, int, bool>>[];
 
   var w = t;
   do {
@@ -83,7 +86,7 @@ List<Triplet<int, int, bool>> getQueryHighlights(String text, String query) {
   if (idxs.isEmpty) {
     idxs.add(Triplet(0, t.length, false));
   } else {
-    final List<Triplet<int, int, bool>> result = [];
+    final result = <Triplet<int, int, bool>>[];
     Triplet<int, int, bool>? last;
 
     for (final idx in idxs) {
@@ -92,12 +95,16 @@ List<Triplet<int, int, bool>> getQueryHighlights(String text, String query) {
         if (idx.first == 0) {
           result.add(idx);
         } else {
-          result..add(Triplet(0, idx.first, false))..add(idx);
+          result
+            ..add(Triplet(0, idx.first, false))
+            ..add(idx);
         }
       } else if (last.second == idx.first) {
         result.add(idx);
       } else {
-        result..add(Triplet(last.second, idx.first, false))..add(idx);
+        result
+          ..add(Triplet(last.second, idx.first, false))
+          ..add(idx);
       }
 
       if (isLast && idx.second != t.length) {
@@ -114,16 +121,17 @@ List<Triplet<int, int, bool>> getQueryHighlights(String text, String query) {
 }
 
 class Triplet<A, B, C> {
-  A first;
-  B second;
-  C third;
   Triplet(
     this.first,
     this.second,
     this.third,
   );
 
-  Triplet copyWith({
+  A first;
+  B second;
+  C third;
+
+  Triplet<A, B, C> copyWith({
     A? first,
     B? second,
     C? third,
@@ -139,16 +147,15 @@ class Triplet<A, B, C> {
   String toString() => 'Triple first: $first, second: $second, third: $third';
 
   @override
-  bool operator ==(Object o) {
-    return o is Triplet && o.first == first && o.second == second && o.third == third;
+  bool operator ==(Object other) {
+    return other is Triplet &&
+        other.first == first &&
+        other.second == second &&
+        other.third == third;
   }
 
   @override
   int get hashCode {
-    return hashList([
-      first,
-      second,
-      third,
-    ]);
+    return hashList([first, second, third]);
   }
 }

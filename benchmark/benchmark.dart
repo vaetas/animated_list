@@ -18,8 +18,8 @@ class Item {
 }
 
 Future<void> main() async {
-  final List<Item> list = List.generate(1000, (index) => Item(index, index));
-  final List<Item> newList = List.from(list)..shuffle();
+  final list = List<Item>.generate(1000, (index) => Item(index, index));
+  final newList = List<Item>.from(list)..shuffle();
 
   final start = DateTime.now();
   await MyersDiff.diff<Item>(

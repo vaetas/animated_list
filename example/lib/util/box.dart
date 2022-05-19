@@ -15,27 +15,6 @@ enum ShadowDirection {
 }
 
 class Box extends StatelessWidget {
-  final double borderRadius;
-  final double elevation;
-  final double? height;
-  final double? width;
-  final Border? border;
-  final BorderRadius? customBorders;
-  final EdgeInsets? margin;
-  final EdgeInsets? padding;
-  final Widget? child;
-  final Color color;
-  final Color shadowColor;
-  final List<BoxShadow>? boxShadows;
-  final VoidCallback? onTap;
-  final VoidCallback? onLongPress;
-  final VoidCallback? onDoubleTap;
-  final BoxShape boxShape;
-  final AlignmentGeometry? alignment;
-  final ShadowDirection shadowDirection;
-  final Color? splashColor;
-  final Duration? duration;
-  final BoxConstraints? constraints;
   const Box({
     Key? key,
     this.child,
@@ -60,6 +39,28 @@ class Box extends StatelessWidget {
     this.shadowDirection = ShadowDirection.bottomRight,
     this.padding = const EdgeInsets.all(0),
   }) : super(key: key);
+
+  final double borderRadius;
+  final double elevation;
+  final double? height;
+  final double? width;
+  final Border? border;
+  final BorderRadius? customBorders;
+  final EdgeInsets? margin;
+  final EdgeInsets? padding;
+  final Widget? child;
+  final Color color;
+  final Color shadowColor;
+  final List<BoxShadow>? boxShadows;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onDoubleTap;
+  final BoxShape boxShape;
+  final AlignmentGeometry? alignment;
+  final ShadowDirection shadowDirection;
+  final Color? splashColor;
+  final Duration? duration;
+  final BoxConstraints? constraints;
 
   static const wrap = -1;
 
@@ -86,7 +87,8 @@ class Box extends StatelessWidget {
       child: child,
     );
 
-    if (boxShape == BoxShape.circle || (customBorders != null || borderRadius > 0.0)) {
+    if (boxShape == BoxShape.circle ||
+        (customBorders != null || borderRadius > 0.0)) {
       content = ClipRRect(
         borderRadius: br,
         child: content,
@@ -97,14 +99,17 @@ class Box extends StatelessWidget {
       content = Material(
         color: Colors.transparent,
         type: MaterialType.transparency,
-        shape: circle ? const CircleBorder() : RoundedRectangleBorder(borderRadius: br),
+        shape: circle
+            ? const CircleBorder()
+            : RoundedRectangleBorder(borderRadius: br),
         child: InkWell(
           splashColor: splashColor ?? theme.splashColor,
           highlightColor: theme.highlightColor,
           hoverColor: theme.hoverColor,
           focusColor: theme.focusColor,
-          customBorder:
-              circle ? const CircleBorder() : RoundedRectangleBorder(borderRadius: br),
+          customBorder: circle
+              ? const CircleBorder()
+              : RoundedRectangleBorder(borderRadius: br),
           onTap: onTap,
           onLongPress: onLongPress,
           onDoubleTap: onDoubleTap,
@@ -113,7 +118,7 @@ class Box extends StatelessWidget {
       );
     }
 
-    final List<BoxShadow>? boxShadow = boxShadows ??
+    final boxShadow = boxShadows ??
         ((elevation > 0 && (shadowColor.opacity > 0))
             ? [
                 BoxShadow(

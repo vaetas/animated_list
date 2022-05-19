@@ -56,21 +56,25 @@ const List<Language> languages = [
 ];
 
 class Language {
-  final String englishName;
-  final String nativeName;
   const Language({
     required this.englishName,
     required this.nativeName,
   });
 
-  @override
-  String toString() => 'Language englishName: $englishName, nativeName: $nativeName';
+  final String englishName;
+  final String nativeName;
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() =>
+      'Language englishName: $englishName, nativeName: $nativeName';
 
-    return o is Language && o.englishName == englishName && o.nativeName == nativeName;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Language &&
+        other.englishName == englishName &&
+        other.nativeName == nativeName;
   }
 
   @override

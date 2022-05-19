@@ -2,11 +2,10 @@ import 'dart:ui';
 
 import 'package:animated_list/implicitly_animated_reorderable_list.dart';
 import 'package:animated_list/transitions.dart';
+import 'package:example/ui/ui.dart';
+import 'package:example/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-import '../util/util.dart';
-import 'ui.dart';
 
 class LanguagePage extends StatefulWidget {
   const LanguagePage({
@@ -55,7 +54,7 @@ class _LanguagePageState extends State<LanguagePage>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Examples'),
-        backgroundColor: theme.accentColor,
+        backgroundColor: theme.colorScheme.secondary,
         actions: <Widget>[
           _buildPopupMenuButton(textTheme),
         ],
@@ -194,7 +193,7 @@ class _LanguagePageState extends State<LanguagePage>
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    final List<Widget> actions = [
+    final actions = <Widget>[
       SlideAction(
         closeOnTap: true,
         color: Colors.redAccent,
@@ -250,7 +249,7 @@ class _LanguagePageState extends State<LanguagePage>
               child: Text(
                 '${selectedLanguages.indexOf(lang) + 1}',
                 style: textTheme.bodyText2?.copyWith(
-                  color: theme.accentColor,
+                  color: theme.colorScheme.secondary,
                   fontSize: 16,
                 ),
               ),
@@ -312,7 +311,7 @@ class _LanguagePageState extends State<LanguagePage>
     return Box(
       color: Colors.white,
       onTap: () async {
-        final result = await Navigator.push(
+        final result = await Navigator.push<Language>(
           context,
           MaterialPageRoute(
             builder: (context) => const LanguageSearchPage(),
@@ -394,7 +393,7 @@ class _LanguagePageState extends State<LanguagePage>
             setState(selectedLanguages.shuffle);
             break;
           case 'Test':
-            Navigator.push(
+            Navigator.push<void>(
               context,
               MaterialPageRoute(
                 builder: (_) => const TestPage(),
@@ -423,10 +422,11 @@ class _LanguagePageState extends State<LanguagePage>
 }
 
 class Pair<A, B> {
-  final A first;
-  final B second;
   Pair(
     this.first,
     this.second,
   );
+
+  final A first;
+  final B second;
 }

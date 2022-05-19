@@ -1,10 +1,31 @@
 import 'package:animated_list/src/custom_sliver_animated_list.dart';
+import 'package:animated_list/src/src.dart';
 import 'package:flutter/material.dart';
-
-import 'src.dart';
 
 /// A Flutter ListView that implicitly animates between the changes of two lists.
 class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
+  /// Creates a Flutter ListView that implicitly animates between the changes
+  /// of two lists.
+  const ImplicitlyAnimatedList({
+    Key? key,
+    required this.items,
+    required this.itemBuilder,
+    required this.areItemsTheSame,
+    this.removeItemBuilder,
+    this.updateItemBuilder,
+    this.insertDuration = const Duration(milliseconds: 500),
+    this.removeDuration = const Duration(milliseconds: 500),
+    this.updateDuration = const Duration(milliseconds: 500),
+    this.spawnIsolate,
+    this.scrollDirection = Axis.vertical,
+    this.reverse = false,
+    this.controller,
+    this.primary,
+    this.physics,
+    this.shrinkWrap = false,
+    this.padding,
+  }) : super(key: key);
+
   /// The current data that this [ImplicitlyAnimatedList] should represent.
   final List<E> items;
 
@@ -119,28 +140,6 @@ class ImplicitlyAnimatedList<E extends Object> extends StatelessWidget {
   /// The amount of space by which to inset the children.
   final EdgeInsetsGeometry? padding;
 
-  /// Creates a Flutter ListView that implicitly animates between the changes
-  /// of two lists.
-  const ImplicitlyAnimatedList({
-    Key? key,
-    required this.items,
-    required this.itemBuilder,
-    required this.areItemsTheSame,
-    this.removeItemBuilder,
-    this.updateItemBuilder,
-    this.insertDuration = const Duration(milliseconds: 500),
-    this.removeDuration = const Duration(milliseconds: 500),
-    this.updateDuration = const Duration(milliseconds: 500),
-    this.spawnIsolate,
-    this.scrollDirection = Axis.vertical,
-    this.reverse = false,
-    this.controller,
-    this.primary,
-    this.physics,
-    this.shrinkWrap = false,
-    this.padding,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -220,8 +219,8 @@ class SliverImplicitlyAnimatedList<E extends Object>
         );
 
   @override
-  _SliverImplicitlyAnimatedListState<E> createState() =>
-      _SliverImplicitlyAnimatedListState<E>();
+  ImplicitlyAnimatedListBaseState<Widget, SliverImplicitlyAnimatedList<E>, E>
+      createState() => _SliverImplicitlyAnimatedListState<E>();
 }
 
 class _SliverImplicitlyAnimatedListState<E extends Object>
@@ -233,7 +232,7 @@ class _SliverImplicitlyAnimatedListState<E extends Object>
       key: animatedListKey,
       initialItemCount: newList.length,
       itemBuilder: (context, index, animation) {
-        final E? item = data.getOrNull(index) ??
+        final item = data.getOrNull(index) ??
             newList.getOrNull(index) ??
             oldList.getOrNull(index);
         final didChange = changes[item] != null;

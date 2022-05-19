@@ -1,19 +1,19 @@
+import 'package:animated_list/src/src.dart';
 import 'package:flutter/foundation.dart';
-
-import '../src.dart';
 
 // This implementation of the MyersDiff algorithm was originally written by David Bota
 // over here https://gitlab.com/otsoaUnLoco/animated-stream-list.
 
 class _DiffArguments<E> {
+  _DiffArguments(this.oldList, this.newList);
+
   final List<E> oldList;
   final List<E> newList;
-  _DiffArguments(this.oldList, this.newList);
 }
 
 class MyersDiff<E> {
-  static ItemDiffUtil? eq;
-  static ItemDiffUtil? cq;
+  static ItemDiffUtil<dynamic>? eq;
+  static ItemDiffUtil<dynamic>? cq;
 
   static int isolateThreshold = 1500;
 
@@ -35,8 +35,9 @@ class MyersDiff<E> {
     ItemDiffUtil<E>? areItemsTheSame,
     bool? spawnIsolate,
   }) {
-    eq = (a, b) => areItemsTheSame?.call(a, b) ?? a == b;
-    cq = (a, b) => false;
+    eq = (dynamic a, dynamic b) =>
+        areItemsTheSame?.call(a as E, b as E) ?? a == b;
+    cq = (dynamic a, dynamic b) => false;
 
     final args = _DiffArguments<E>(oldList, newList);
 
@@ -52,8 +53,8 @@ class MyersDiff<E> {
 }
 
 List<Diff> _myersDiff<E>(_DiffArguments<E> args) {
-  final List<E> oldList = args.oldList;
-  final List<E> newList = args.newList;
+  final oldList = args.oldList;
+  final newList = args.newList;
 
   if (oldList == newList) return [];
 
@@ -68,29 +69,32 @@ List<Diff> _myersDiff<E>(_DiffArguments<E> args) {
     return [Deletion(0, oldSize)];
   }
 
-  final equals = MyersDiff.eq ?? (a, b) => a == b;
+  final equals = MyersDiff.eq ?? (E a, E b) => a == b;
   final path = _buildPath(oldList, newList, equals)!;
   final diffs = _buildPatch(path, oldList, newList)..sort();
   return diffs.reversed.toList(growable: true);
 }
 
 PathNode? _buildPath<E>(
-    List<E> oldList, List<E> newList, ItemDiffUtil<E> equals) {
+  List<E> oldList,
+  List<E> newList,
+  ItemDiffUtil<E> equals,
+) {
   final oldSize = oldList.length;
   final newSize = newList.length;
 
-  final int max = oldSize + newSize + 1;
-  final int size = (2 * max) + 1;
-  final int middle = size ~/ 2;
-  final List<PathNode?> diagonal = List.filled(size, null);
+  final max = oldSize + newSize + 1;
+  final size = (2 * max) + 1;
+  final middle = size ~/ 2;
+  final diagonal = List<PathNode?>.filled(size, null);
 
   diagonal[middle + 1] = Snake(0, -1, null);
 
-  for (int d = 0; d < max; d++) {
-    for (int k = -d; k <= d; k += 2) {
-      final int kmiddle = middle + k;
-      final int kplus = kmiddle + 1;
-      final int kminus = kmiddle - 1;
+  for (var d = 0; d < max; d++) {
+    for (var k = -d; k <= d; k += 2) {
+      final kmiddle = middle + k;
+      final kplus = kmiddle + 1;
+      final kminus = kmiddle - 1;
       PathNode? prev;
 
       int i;
@@ -106,7 +110,7 @@ PathNode? _buildPath<E>(
 
       diagonal[kminus] = null;
 
-      int j = i - k;
+      var j = i - k;
       PathNode node = DiffNode(i, j, prev);
       while (i < oldSize && j < newSize && equals(oldList[i], newList[j])) {
         i++;
@@ -130,7 +134,7 @@ PathNode? _buildPath<E>(
 }
 
 List<Diff> _buildPatch<E>(PathNode path, List<E> oldList, List<E> newList) {
-  final List<Diff> diffs = [];
+  final diffs = <Diff>[];
 
   if (path.isSnake) {
     // ignore: parameter_assignments
@@ -148,8 +152,8 @@ List<Diff> _buildPatch<E>(PathNode path, List<E> oldList, List<E> newList) {
     final iAnchor = path.originIndex;
     final jAnchor = path.revisedIndex;
 
-    final List<E> original = oldList.sublist(iAnchor, i);
-    final List<E> revised = newList.sublist(jAnchor, j);
+    final original = oldList.sublist(iAnchor, i);
+    final revised = newList.sublist(jAnchor, j);
 
     if (original.isEmpty && revised.isNotEmpty) {
       diffs.add(Insertion(iAnchor, revised.length, revised));

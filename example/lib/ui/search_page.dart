@@ -1,8 +1,7 @@
 import 'package:animated_list/implicitly_animated_reorderable_list.dart';
 import 'package:animated_list/transitions.dart';
+import 'package:example/util/util.dart';
 import 'package:flutter/material.dart';
-
-import '../util/util.dart';
 
 class LanguageSearchPage extends StatefulWidget {
   const LanguageSearchPage({Key? key}) : super(key: key);
@@ -138,13 +137,16 @@ class _LanguageSearchPageState extends State<LanguageSearchPage> {
   }
 
   PreferredSize _buildAppBar(
-      double padding, ThemeData theme, TextTheme textTheme) {
+    double padding,
+    ThemeData theme,
+    TextTheme textTheme,
+  ) {
     return PreferredSize(
       preferredSize: Size.fromHeight(56 + padding),
       child: Box(
         height: 56 + padding,
         width: double.infinity,
-        color: theme.accentColor,
+        color: theme.colorScheme.secondary,
         elevation: 4,
         shadowColor: Colors.black.withOpacity(0.2),
         child: Column(

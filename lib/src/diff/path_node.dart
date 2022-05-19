@@ -1,12 +1,13 @@
 abstract class PathNode {
-  final int originIndex;
-  final int revisedIndex;
-  final PathNode? previousNode;
   PathNode(
     this.originIndex,
     this.revisedIndex,
     this.previousNode,
   );
+
+  final int originIndex;
+  final int revisedIndex;
+  final PathNode? previousNode;
 
   bool get isSnake;
 
@@ -25,9 +26,9 @@ abstract class PathNode {
     while (node != null) {
       buffer
         ..write('(')
-        ..write('${node.originIndex.toString()}')
+        ..write(node.originIndex.toString())
         ..write(',')
-        ..write('${node.revisedIndex.toString()}')
+        ..write(node.revisedIndex.toString())
         ..write(')');
 
       node = node.previousNode;

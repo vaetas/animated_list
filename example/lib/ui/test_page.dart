@@ -132,14 +132,15 @@ class TestPageState extends State<TestPage> {
 }
 
 class Test {
-  final int key;
   Test(this.key);
 
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  final int key;
 
-    return o is Test && o.key == key;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Test && other.key == key;
   }
 
   @override

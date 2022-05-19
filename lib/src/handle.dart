@@ -1,8 +1,6 @@
-import 'package:flutter/gestures.dart';
+import 'package:animated_list/src/src.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'src.dart';
 
 /// A `Widget` that is used to initiate a drag/reorder of a [Reorderable] inside an
 /// [ImplicitlyAnimatedReorderableList].
@@ -10,6 +8,20 @@ import 'src.dart';
 /// A `Handle` must have a [Reorderable] and an [ImplicitlyAnimatedReorderableList]
 /// as its ancestor.
 class Handle extends StatefulWidget {
+  /// Creates a widget that can initiate a drag/reorder of an item inside an
+  /// [ImplicitlyAnimatedReorderableList].
+  ///
+  /// A Handle must have a [Reorderable] and an [ImplicitlyAnimatedReorderableList]
+  /// as its ancestor.
+  const Handle({
+    Key? key,
+    required this.child,
+    this.delay = Duration.zero,
+    this.capturePointer = true,
+    this.vibrate = true,
+    this.enabled = true,
+  }) : super(key: key);
+
   /// The child of this Handle that can initiate a reorder.
   ///
   /// This might for instance be an [Icon] or a [ListTile].
@@ -38,32 +50,22 @@ class Handle extends StatefulWidget {
 
   final bool enabled;
 
-  /// Creates a widget that can initiate a drag/reorder of an item inside an
-  /// [ImplicitlyAnimatedReorderableList].
-  ///
-  /// A Handle must have a [Reorderable] and an [ImplicitlyAnimatedReorderableList]
-  /// as its ancestor.
-  const Handle({
-    Key? key,
-    required this.child,
-    this.delay = Duration.zero,
-    this.capturePointer = true,
-    this.vibrate = true,
-    this.enabled = true,
-  }) : super(key: key);
-
   @override
-  _HandleState createState() => _HandleState();
+  State<Handle> createState() => _HandleState();
 }
 
 class _HandleState extends State<Handle> {
   ScrollableState? _parent;
+
   // A custom handler used to cancel the pending onDragStart callbacks.
   Handler? _handler;
+
   // The parent Reorderable item.
   ReorderableState? _reorderable;
+
   // The parent list.
   ImplicitlyAnimatedReorderableListState? _list;
+
   // Whether the ImplicitlyAnimatedReorderableList has a
   // scrollDirection of Axis.vertical.
   bool get _isVertical => _list?.isVertical ?? true;
@@ -72,11 +74,13 @@ class _HandleState extends State<Handle> {
   late double _downOffset;
   double? _startOffset;
   double? _currentOffset;
+
   double get _delta => (_currentOffset ?? 0) - (_startOffset ?? 0);
 
   // Use flags from the list as this State object is being
   // recreated between dragged and normal state.
   bool get _inDrag => _list!.inDrag;
+
   bool get _inReorder => _list!.inReorder;
 
   // The pixel offset of a possible parent Scrollable
@@ -134,11 +138,15 @@ class _HandleState extends State<Handle> {
     if (!widget.enabled) return widget.child;
 
     _list = ImplicitlyAnimatedReorderableList.of(context);
-    assert(_list != null,
-        'No ancestor ImplicitlyAnimatedReorderableList was found in the hierarchy!');
+    assert(
+      _list != null,
+      'No ancestor ImplicitlyAnimatedReorderableList was found in the hierarchy!',
+    );
     _reorderable = Reorderable.of(context);
-    assert(_reorderable != null,
-        'No ancestor Reorderable was found in the hierarchy!');
+    assert(
+      _reorderable != null,
+      'No ancestor Reorderable was found in the hierarchy!',
+    );
     _parent = Scrollable.of(_list!.context);
 
     // Sometimes the cancel callbacks of the GestureDetector

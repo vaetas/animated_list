@@ -29,8 +29,9 @@ void main() {
 }
 
 class _Model {
-  final String id;
   _Model(this.id);
+
+  final String id;
 
   @override
   String toString() => id;
