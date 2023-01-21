@@ -1,4 +1,4 @@
-import 'package:animated_list/implicitly_animated_reorderable_list.dart';
+import 'package:animated_list/animated_list.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // ignore_for_file: avoid_print

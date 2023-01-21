@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:animated_list/implicitly_animated_reorderable_list.dart';
-import 'package:animated_list/transitions.dart';
+import 'package:animated_list/animated_list.dart';
 import 'package:flutter/material.dart';
 
 class TestPage extends StatefulWidget {

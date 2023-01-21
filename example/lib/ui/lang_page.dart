@@ -1,7 +1,6 @@
 import 'dart:ui';
 
-import 'package:animated_list/implicitly_animated_reorderable_list.dart';
-import 'package:animated_list/transitions.dart';
+import 'package:animated_list/animated_list.dart';
 import 'package:example/ui/ui.dart';
 import 'package:example/util/util.dart';
 import 'package:flutter/material.dart';
