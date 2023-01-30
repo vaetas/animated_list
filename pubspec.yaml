@@ -1,6 +1,6 @@
 name: animated_list
-description: A Flutter ListView that implicitly animates between the changes of
-  two lists with the support to reorder its items.
+description: A Flutter ListView that implicitly animates between the changes of two lists with the \
+  support to reorder its items.
 version: 0.4.2
 homepage: https://github.com/vaetas/animated_list
 
@@ -8,7 +8,7 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  async: ^2.8.2
+  async: ^2.10.0
   flutter:
     sdk: flutter
 
